@@ -55,16 +55,18 @@ public class Customer {
 	}
 
 
-	public void setCustName(String custName) {
+	public void setCustName(String custName) throws InvalidNameException {
 		String str = "!@#$%&*()'+,-./:;<=>?[]^_`{|}0123456789";
-		for(int i=0; i<custName.length();i++) {
-			if(str.contains(Character.toString(custName.charAt(i)))) {
-				System.out.println("Customer name is invalid!");
-				System.exit(0);
-			}else {
-				this.custName = custName;
+		if(custName.length() > 6) {
+			for(int i=0; i<custName.length(); i++) {
+				if(str.contains(Character.toString(custName.charAt(i)))) {
+					throw new InvalidNameException("Customer name is invalid!");
+				}else {
+					this.custName = custName;
+				}
 			}
-			
+		}else {
+			throw new InvalidNameException("Customer name is invalid!");
 		}
 	}
 
@@ -119,6 +121,6 @@ public class Customer {
 	}
 	
 	public String toString() {
-		return "Customer ID: "+ this.custId + "\nCustomer Name: "+ this.custName + "\nAddress: " + this.city + ", " + this.state + " - " + this.zip + ", " + this.country; 
+		return "Customer ID: "+ this.custId + "\nCustomer Name: "+ this.custName + "\nAddress: " + this.city + ", " + this.state + " - " + this.zip + ", " + this.country+"\n\n"; 
 	}
 }

@@ -1,7 +1,6 @@
 package com.manipal.corejavaproj.service;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -26,7 +25,12 @@ public class CustomerServiceImpl implements CustomerService{
 			while(rs.next()) {
 				Customer cust = new Customer();
 				cust.setCustId(rs.getInt(1));
-				cust.setCustName(rs.getString(2));
+				try {
+					cust.setCustName(rs.getString(2));
+				}catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				cust.setCity(rs.getString(3));
 				cust.setState(rs.getString(4));
 				cust.setZip(rs.getInt(5));
@@ -41,24 +45,33 @@ public class CustomerServiceImpl implements CustomerService{
 			Connection conn = DAO.getConnection();
 			String insertQuery = "insert into customer(customer_name, password, city, state, zip, country) values(?, ?, ?, ?, ?, ?)";
 			PreparedStatement stmt = conn.prepareStatement(insertQuery);
-			stmt.setString(1, customer.getCustName());
-			stmt.setString(2, customer.getPassword());
-			stmt.setString(3, customer.getCity());
-			stmt.setString(4, customer.getState());
-			stmt.setInt(5, customer.getZip());
-			stmt.setString(6, customer.getCountry());
+			if(!customer.getCustName().isEmpty() && customer.getCustName() != null) {
+				stmt.setString(1, customer.getCustName());
+			}
+			if(!customer.getPassword().isEmpty() && customer.getPassword() != null) {
+				stmt.setString(2, customer.getPassword());
+			}
+			if(!customer.getCity().isEmpty() && customer.getCity() != null) {
+				stmt.setString(3, customer.getCity());
+			}
+			if(!customer.getState().isEmpty() && customer.getState() != null) {
+				stmt.setString(4, customer.getState());
+			}
+			if(customer.getZip() != 0) {
+				stmt.setInt(5, customer.getZip());
+			}
+			if(!customer.getCountry().isEmpty() && customer.getCountry() != null){
+				stmt.setString(6, customer.getCountry());
+			}
 			int b = stmt.executeUpdate();
-
 		return b;
 	}
 	
 	public int deleteCustomer(int custid) throws ClassNotFoundException, SQLException {
-		
 		Connection conn = DAO.getConnection();
 		String deleteQuery = "delete from customer where customer_id="+custid;
 		PreparedStatement stmt = conn.prepareStatement(deleteQuery);
 		int b = stmt.executeUpdate();
-
 		return b;
 	}
 	
@@ -88,7 +101,6 @@ public class CustomerServiceImpl implements CustomerService{
 		updateQuery += " where customer_id="+custid;
 		PreparedStatement stmt = conn.prepareStatement(updateQuery);
 		int c = stmt.executeUpdate();
-
 		return c;
 	}
 
@@ -103,7 +115,12 @@ public class CustomerServiceImpl implements CustomerService{
 			while(rs.next()) {
 				Customer cust = new Customer();
 				cust.setCustId(rs.getInt(1));
-				cust.setCustName(rs.getString(2));
+				try {
+					cust.setCustName(rs.getString(2));
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				cust.setCity(rs.getString(3));
 				cust.setState(rs.getString(4));
 				cust.setZip(rs.getInt(5));
@@ -114,6 +131,6 @@ public class CustomerServiceImpl implements CustomerService{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	return customerArray;
+		return customerArray;
 	}
 }

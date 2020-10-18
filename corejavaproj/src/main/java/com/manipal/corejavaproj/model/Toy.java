@@ -53,8 +53,15 @@ public class Toy {
 		return toyName;
 	}
 
-	public void setToyName(String toyName) {
-		this.toyName = toyName;
+	public void setToyName(String toyName) throws InvalidNameException {
+		String str = "!@#$%&*()'+,-./:;<=>?[]^_`{|}0123456789";
+		for(int i=0; i<toyName.length(); i++) {
+			if(str.contains(Character.toString(toyName.charAt(i)))) {
+				throw new InvalidNameException("Toy name is invalid!");
+			}else {
+				this.toyName = toyName;
+			}
+		}
 	}
 
 	public String getToyType() {
@@ -106,7 +113,7 @@ public class Toy {
 	}
 	
 	public String toString() {
-		return "Toy ID: "+ this.toyId + "\nToy Name: "+ this.toyName + "\nToy Type: " + this.toyType + "\nMin Age: " + this.minAge + "\nMax Age: " + this.maxAge + "\nPrice: " + this.price + "\nQuantity: " + this.quantity + "\nRental Amount: " + this.rentalAmount; 
+		return "Toy ID: "+ this.toyId + "\nToy Name: "+ this.toyName + "\nToy Type: " + this.toyType + "\nMin Age: " + this.minAge + "\nMax Age: " + this.maxAge + "\nPrice: " + this.price + "\nQuantity: " + this.quantity + "\nRental Amount: " + this.rentalAmount+"\n\n"; 
 	}
 	
 }

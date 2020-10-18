@@ -20,11 +20,15 @@ public class ToyServiceImpl implements ToyService{
 		String query = "select * from toy";
 		ResultSet rs = stmt.executeQuery(query);
 		toyArray = new ArrayList<Toy>();
-		
 		while(rs.next()) {
 			Toy toy = new Toy();
 			toy.setToyId(rs.getInt(1));
-			toy.setToyName(rs.getString(2));
+			try {
+				toy.setToyName(rs.getString(2));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			toy.setToyType(rs.getString(3));
 			toy.setMinAge(rs.getInt(4));
 			toy.setMaxAge(rs.getInt(5));
@@ -40,25 +44,51 @@ public class ToyServiceImpl implements ToyService{
 		Connection conn = DAO.getConnection();
 		String insertQuery = "insert into toy(toy_name, toy_type, minage, maxage, price, quantity, rental_amount) values(?, ?, ?, ?, ?, ?, ?)";
 		PreparedStatement stmt = conn.prepareStatement(insertQuery);
-		stmt.setString(1, toy.getToyName());
-		stmt.setString(2, toy.getToyType());
-		stmt.setInt(3, toy.getMinAge());
-		stmt.setInt(4, toy.getMaxAge());
-		stmt.setInt(5, toy.getPrice());
-		stmt.setInt(6, toy.getQuantity());
-		stmt.setInt(7, toy.getRentalAmount());
+		if(!toy.getToyName().isEmpty() && toy.getToyName() != null) {
+			stmt.setString(1, toy.getToyName());
+		}else {
+			return 0;
+		}
+		if(!toy.getToyType().isEmpty() && toy.getToyType() != null) {
+			stmt.setString(2, toy.getToyType());
+		}else {
+			return 0;
+		}
+		if(toy.getMinAge() != 0) {
+			stmt.setInt(3, toy.getMinAge());
+		}else {
+			return 0;
+		}
+		if(toy.getMaxAge() != 0 && toy.getMaxAge() > toy.getMinAge()) {
+			stmt.setInt(4, toy.getMaxAge());
+		}else {
+			return 0;
+		}
+		if(toy.getPrice() != 0) {
+			stmt.setInt(5, toy.getPrice());
+		}else {
+			return 0;
+		}
+		if(toy.getQuantity() != 0) {
+			stmt.setInt(6, toy.getQuantity());
+		}else {
+			return 0;
+		}
+		if(toy.getRentalAmount() != 0){
+			stmt.setInt(7, toy.getRentalAmount());
+		}else {
+			return 0;
+		}
 		int b = stmt.executeUpdate();
 
 		return b;
 	}
 
 	public int deleteToyDetails(int toyid) throws ClassNotFoundException, SQLException {
-		
 		Connection conn = DAO.getConnection();
 		String deleteQuery = "delete from toy where toy_id="+toyid;
 		PreparedStatement stmt = conn.prepareStatement(deleteQuery);
 		int b = stmt.executeUpdate();
-
 		return b;
 	}
 
@@ -102,10 +132,19 @@ public class ToyServiceImpl implements ToyService{
 		toyArray = new ArrayList<Toy>();
 		while(rs.next()) {
 			Toy toy = new Toy();
-			  toy.setToyId(rs.getInt(1)); toy.setToyName(rs.getString(2));
-			  toy.setToyType(rs.getString(3)); toy.setMinAge(rs.getInt(4));
-			  toy.setMaxAge(rs.getInt(5)); toy.setPrice(rs.getInt(6));
-			  toy.setQuantity(rs.getInt(7)); toy.setRentalAmount(rs.getInt(8));
+			  toy.setToyId(rs.getInt(1)); 
+			  try {
+				toy.setToyName(rs.getString(2));
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			  toy.setToyType(rs.getString(3));
+			  toy.setMinAge(rs.getInt(4));
+			  toy.setMaxAge(rs.getInt(5));
+			  toy.setPrice(rs.getInt(6));
+			  toy.setQuantity(rs.getInt(7));
+			  toy.setRentalAmount(rs.getInt(8));
 			  toyArray.add(toy);
 		}
 	return toyArray;		
